@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   annotations:
-    build.appstudio.openshift.io/repo: https://github.com/stuartwdouglas/multi-platform-test-prod?rev={{revision}}
+    build.appstudio.openshift.io/repo: https://github.com/qijin-bj/multi-platform-test-prod?rev={{revision}}
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
@@ -10,23 +10,23 @@ metadata:
     pipelinesascode.tekton.dev/on-target-branch: '[main]'
   creationTimestamp: null
   labels:
-    appstudio.openshift.io/application: multi-platform-test-prod
+    appstudio.openshift.io/application: multi-arch
     appstudio.openshift.io/component: multi-platform-test-prod
     pipelines.appstudio.openshift.io/type: build
   name: multi-platform-test-prod-on-push
-  namespace: sdouglas1-tenant
+  namespace: dev-release-team-tenant
 spec:
   params:
-  - name: dockerfile
-    value: docker/Dockerfile
-  - name: git-url
-    value: '{{repo_url}}'
-  - name: output-image
-    value: quay.io/redhat-user-workloads/sdouglas1-tenant/multi-platform-test-prod/multi-platform-test-prod:{{revision}}
-  - name: path-context
-    value: .
-  - name: revision
-    value: '{{revision}}'
+    - name: dockerfile
+      value: docker/Dockerfile
+    - name: git-url
+      value: '{{source_url}}'
+    - name: output-image
+      value: quay.io/redhat-user-workloads-stage/dev-release-team-tenant/multi-arch/multi-platform-test-prod:{{revision}}
+    - name: path-context
+      value: .
+    - name: revision
+      value: '{{revision}}'
   pipelineRef:
     name: build-pipeline
   workspaces:
@@ -38,31 +38,6 @@ spec:
           resources:
             requests:
               storage: 1Gi
-    - name: workspace-arm64
-      volumeClaimTemplate:
-        spec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 1Gi
-    - name: workspace-ppc64le
-      volumeClaimTemplate:
-        spec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 1Gi
-    - name: workspace-s390x
-      volumeClaimTemplate:
-        spec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 1Gi
     - name: git-auth
       secret:
         secretName: '{{ git_auth_secret }}'
-
