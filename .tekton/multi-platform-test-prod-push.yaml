@@ -14,7 +14,7 @@ metadata:
     appstudio.openshift.io/component: multi-platform-test-prod
     pipelines.appstudio.openshift.io/type: build
   name: multi-platform-test-prod-on-push
-  namespace: jinqi-1-tenant
+  namespace: dev-release-team-tenant
 spec:
   params:
   - name: git-url
@@ -22,7 +22,7 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads-stage/jinqi-1-tenant/multi-arch/multi-platform-test-prod:{{revision}}
+    value: quay.io/redhat-user-workloads-stage/dev-release-team-tenant/multi-arch/multi-platform-test-prod:{{revision}}
   - name: dockerfile
     value: Dockerfile
   pipelineSpec:
